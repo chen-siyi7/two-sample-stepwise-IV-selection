@@ -71,6 +71,12 @@ twosample_uvstepIV = function(p, R, betaZX, betaZY, se_betaZY, n1, n2, gamma_hat
     diag(test11)[i] = 1
     W1 = cbind(test11, gamma_hat)
     solve.W1 = t(W1) %*% ZTZ %*% W1
+    non0 = as.numeric(rowSums(solve.W1 != 0))
+    solve.W1 = solve.W1[which(non0>0),]
+    non0 = as.numeric(colSums(solve.W1 != 0))
+    solve.W1 = solve.W1[,which(non0>0)]
+    non0 = as.numeric(colSums(W1 != 0))
+    W1 = W1[,which(non0>0)]
     beta1 = matrix(ginv(solve.W1) %*% t(W1) %*% (ZTY), ncol = 1)
     testbic[i] = n2*log(YTY - t(beta1)%*%t(W1)%*%ZTY)+log(n2)*sum(diag(test11))
   }
@@ -87,6 +93,13 @@ twosample_uvstepIV = function(p, R, betaZX, betaZY, se_betaZY, n1, n2, gamma_hat
       diag(test11)[whichIV] = 1
       diag(test11)[i] = 1
       W1 = cbind(test11, gamma_hat)
+      solve.W1 = t(W1) %*% ZTZ %*% W1
+      non0 = as.numeric(rowSums(solve.W1 != 0))
+      solve.W1 = solve.W1[which(non0>0),]
+      non0 = as.numeric(colSums(solve.W1 != 0))
+      solve.W1 = solve.W1[,which(non0>0)]
+      non0 = as.numeric(colSums(W1 != 0))
+      W1 = W1[,which(non0>0)]
       beta1 = matrix(ginv(solve.W1) %*% t(W1) %*% (ZTY), ncol = 1)
       testbic[i] = n2*log(YTY - t(beta1)%*%t(W1)%*%ZTY)+log(n2)*sum(diag(test11))
     }
